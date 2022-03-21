@@ -1,15 +1,19 @@
-import { ethers } from 'hardhat';
+import { run, ethers } from 'hardhat';
 
-async function main() {
-	const Greeter = await ethers.getContractFactory('Greeter');
-	const greeter = await Greeter.deploy('Hello, Hardhat!');
-
-	await greeter.deployed();
-
-	console.log('Greeter deployed to:', greeter.address);
+async function deploy() {
+	await run('compile');
+	const Contract = await ethers.getContractFactory('Mover');
+	const contract = await Contract.deploy();
+	await contract.deployed();
+	console.log(contract.address);
 }
 
-main().catch((error) => {
-	console.error(error);
-	process.exitCode = 1;
-});
+(async () => {
+	try {
+		await deploy();
+		process.exit(0);
+	} catch (error) {
+		console.error(error);
+		process.exit(1);
+	}
+})();
